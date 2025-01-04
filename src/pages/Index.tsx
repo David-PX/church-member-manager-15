@@ -72,7 +72,7 @@ const Index = () => {
   });
 
   return (
-    <div className="container py-8">
+    <div>
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-2">
           <Users className="w-6 h-6" />
