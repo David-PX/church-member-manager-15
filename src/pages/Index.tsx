@@ -1,11 +1,19 @@
 import { useState } from "react";
 import { Member, GroupName, MemberRole } from "@/types/member";
-import { MemberCard } from "@/components/MemberCard";
 import { MemberForm } from "@/components/MemberForm";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlus, Users } from "lucide-react";
+import { UserPlus, Users, Pencil } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 // Sample data - replace with actual data source later
 const initialMembers: Member[] = [
@@ -109,10 +117,52 @@ const Index = () => {
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredMembers.map((member) => (
-          <MemberCard key={member.id} member={member} onEdit={handleEditMember} />
-        ))}
+      <div className="rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Member</TableHead>
+              <TableHead>Role</TableHead>
+              <TableHead>Group</TableHead>
+              <TableHead>Contact</TableHead>
+              <TableHead>Address</TableHead>
+              <TableHead className="w-[100px]">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredMembers.map((member) => (
+              <TableRow key={member.id}>
+                <TableCell>
+                  <div className="flex items-center gap-3">
+                    <Avatar>
+                      <AvatarImage src={member.image} alt={member.name} />
+                      <AvatarFallback>{member.name.substring(0, 2)}</AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium">{member.name}</span>
+                  </div>
+                </TableCell>
+                <TableCell>{member.role}</TableCell>
+                <TableCell>{member.group}</TableCell>
+                <TableCell>
+                  <div className="flex flex-col">
+                    <span className="text-sm">{member.email}</span>
+                    <span className="text-sm text-muted-foreground">{member.phone}</span>
+                  </div>
+                </TableCell>
+                <TableCell>{member.address}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => handleEditMember(member)}
+                  >
+                    <Pencil className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
 
       <MemberForm
