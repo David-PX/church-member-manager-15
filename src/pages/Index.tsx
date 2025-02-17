@@ -4,8 +4,9 @@ import { Member, GroupName, MemberRole } from "@/types/member";
 import { MemberForm } from "@/components/MemberForm";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlus, Users, Pencil, Check, X } from "lucide-react";
+import { UserPlus, Users, Pencil, Check, X, Search } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -37,6 +38,7 @@ const Index = () => {
   const [filterGroup, setFilterGroup] = useState<GroupName | "all">("all");
   const [filterRole, setFilterRole] = useState<MemberRole | "all">("all");
   const [filterBaptism, setFilterBaptism] = useState<"all" | "yes" | "no">("all");
+  const [searchTerm, setSearchTerm] = useState("");
   const { toast } = useToast();
 
   const handleAddMember = (newMember: Partial<Member>) => {
@@ -67,13 +69,14 @@ const Index = () => {
   };
 
   const filteredMembers = members.filter((member) => {
+    const matchesSearch = member.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesGroup = filterGroup === "all" || member.group === filterGroup;
     const matchesRole = filterRole === "all" || member.role === filterRole;
     const matchesBaptism = 
       filterBaptism === "all" || 
       (filterBaptism === "yes" && member.isBaptized) || 
       (filterBaptism === "no" && !member.isBaptized);
-    return matchesGroup && matchesRole && matchesBaptism;
+    return matchesSearch && matchesGroup && matchesRole && matchesBaptism;
   });
 
   return (
@@ -89,56 +92,67 @@ const Index = () => {
         </Button>
       </div>
 
-      <div className="flex gap-4 mb-6">
-        <div className="w-48">
-          <Select value={filterGroup} onValueChange={(value: GroupName | "all") => setFilterGroup(value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Grupo" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos los Grupos</SelectItem>
-              {["Youth", "Worship", "Children", "Adults", "Seniors"].map((group) => (
-                <SelectItem key={group} value={group}>
-                  {group === "Youth" ? "Jóvenes" :
-                    group === "Worship" ? "Alabanza" :
-                    group === "Children" ? "Niños" :
-                    group === "Adults" ? "Adultos" :
-                    "Adultos Mayores"}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+      <div className="flex items-center justify-between mb-6">
+        <div className="relative w-72">
+          <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Buscar por nombre..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-8"
+          />
         </div>
-        <div className="w-48">
-          <Select value={filterRole} onValueChange={(value: MemberRole | "all") => setFilterRole(value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Rol" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos los Roles</SelectItem>
-              {["Pastor", "Elder", "Deacon", "Member", "Visitor"].map((role) => (
-                <SelectItem key={role} value={role}>
-                  {role === "Pastor" ? "Pastor" :
-                    role === "Elder" ? "Anciano" :
-                    role === "Deacon" ? "Diácono" :
-                    role === "Member" ? "Miembro" :
-                    "Visitante"}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="w-48">
-          <Select value={filterBaptism} onValueChange={(value: "all" | "yes" | "no") => setFilterBaptism(value)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Filtrar por Bautismo" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos los Miembros</SelectItem>
-              <SelectItem value="yes">Bautizados</SelectItem>
-              <SelectItem value="no">No Bautizados</SelectItem>
-            </SelectContent>
-          </Select>
+        <div className="flex gap-4">
+          <div className="w-48">
+            <Select value={filterGroup} onValueChange={(value: GroupName | "all") => setFilterGroup(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filtrar por Grupo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos los Grupos</SelectItem>
+                {["Youth", "Worship", "Children", "Adults", "Seniors"].map((group) => (
+                  <SelectItem key={group} value={group}>
+                    {group === "Youth" ? "Jóvenes" :
+                      group === "Worship" ? "Alabanza" :
+                      group === "Children" ? "Niños" :
+                      group === "Adults" ? "Adultos" :
+                      "Adultos Mayores"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-48">
+            <Select value={filterRole} onValueChange={(value: MemberRole | "all") => setFilterRole(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filtrar por Rol" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos los Roles</SelectItem>
+                {["Pastor", "Elder", "Deacon", "Member", "Visitor"].map((role) => (
+                  <SelectItem key={role} value={role}>
+                    {role === "Pastor" ? "Pastor" :
+                      role === "Elder" ? "Anciano" :
+                      role === "Deacon" ? "Diácono" :
+                      role === "Member" ? "Miembro" :
+                      "Visitante"}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="w-48">
+            <Select value={filterBaptism} onValueChange={(value: "all" | "yes" | "no") => setFilterBaptism(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Filtrar por Bautismo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos los Miembros</SelectItem>
+                <SelectItem value="yes">Bautizados</SelectItem>
+                <SelectItem value="no">No Bautizados</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
