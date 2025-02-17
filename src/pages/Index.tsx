@@ -16,15 +16,14 @@ import {
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-// Sample data - replace with actual data source later
 const initialMembers: Member[] = [
   {
     id: "1",
-    name: "John Doe",
+    name: "Juan Pérez",
     role: "Pastor",
     group: "Adults",
-    address: "123 Church St, City",
-    email: "john@church.com",
+    address: "Calle Iglesia 123, Ciudad",
+    email: "juan@iglesia.com",
     phone: "(555) 123-4567",
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
     isBaptized: true,
@@ -47,8 +46,8 @@ const Index = () => {
     } as Member;
     setMembers([...members, member]);
     toast({
-      title: "Success",
-      description: "Member added successfully",
+      title: "Éxito",
+      description: "Miembro agregado exitosamente",
     });
   };
 
@@ -62,8 +61,8 @@ const Index = () => {
       members.map((m) => (m.id === selectedMember?.id ? { ...m, ...updatedMember } : m))
     );
     toast({
-      title: "Success",
-      description: "Member updated successfully",
+      title: "Éxito",
+      description: "Miembro actualizado exitosamente",
     });
   };
 
@@ -82,11 +81,11 @@ const Index = () => {
       <div className="flex justify-between items-center mb-8">
         <div className="flex items-center gap-2">
           <Users className="w-6 h-6" />
-          <h1 className="text-2xl font-bold">Church Members</h1>
+          <h1 className="text-2xl font-bold">Miembros de la Iglesia</h1>
         </div>
         <Button onClick={() => setIsFormOpen(true)}>
           <UserPlus className="w-4 h-4 mr-2" />
-          Add Member
+          Agregar Miembro
         </Button>
       </div>
 
@@ -94,13 +93,17 @@ const Index = () => {
         <div className="w-48">
           <Select value={filterGroup} onValueChange={(value: GroupName | "all") => setFilterGroup(value)}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by Group" />
+              <SelectValue placeholder="Filtrar por Grupo" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Groups</SelectItem>
+              <SelectItem value="all">Todos los Grupos</SelectItem>
               {["Youth", "Worship", "Children", "Adults", "Seniors"].map((group) => (
                 <SelectItem key={group} value={group}>
-                  {group}
+                  {group === "Youth" ? "Jóvenes" :
+                    group === "Worship" ? "Alabanza" :
+                    group === "Children" ? "Niños" :
+                    group === "Adults" ? "Adultos" :
+                    "Adultos Mayores"}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -109,13 +112,17 @@ const Index = () => {
         <div className="w-48">
           <Select value={filterRole} onValueChange={(value: MemberRole | "all") => setFilterRole(value)}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by Role" />
+              <SelectValue placeholder="Filtrar por Rol" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Roles</SelectItem>
+              <SelectItem value="all">Todos los Roles</SelectItem>
               {["Pastor", "Elder", "Deacon", "Member", "Visitor"].map((role) => (
                 <SelectItem key={role} value={role}>
-                  {role}
+                  {role === "Pastor" ? "Pastor" :
+                    role === "Elder" ? "Anciano" :
+                    role === "Deacon" ? "Diácono" :
+                    role === "Member" ? "Miembro" :
+                    "Visitante"}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -124,12 +131,12 @@ const Index = () => {
         <div className="w-48">
           <Select value={filterBaptism} onValueChange={(value: "all" | "yes" | "no") => setFilterBaptism(value)}>
             <SelectTrigger>
-              <SelectValue placeholder="Filter by Baptism" />
+              <SelectValue placeholder="Filtrar por Bautismo" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All Members</SelectItem>
-              <SelectItem value="yes">Baptized</SelectItem>
-              <SelectItem value="no">Not Baptized</SelectItem>
+              <SelectItem value="all">Todos los Miembros</SelectItem>
+              <SelectItem value="yes">Bautizados</SelectItem>
+              <SelectItem value="no">No Bautizados</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -139,13 +146,13 @@ const Index = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Member</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Group</TableHead>
-              <TableHead>Contact</TableHead>
-              <TableHead>Address</TableHead>
-              <TableHead>Baptized</TableHead>
-              <TableHead className="w-[100px]">Actions</TableHead>
+              <TableHead>Miembro</TableHead>
+              <TableHead>Rol</TableHead>
+              <TableHead>Grupo</TableHead>
+              <TableHead>Contacto</TableHead>
+              <TableHead>Dirección</TableHead>
+              <TableHead>Bautizado</TableHead>
+              <TableHead className="w-[100px]">Acciones</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -160,8 +167,20 @@ const Index = () => {
                     <span className="font-medium">{member.name}</span>
                   </div>
                 </TableCell>
-                <TableCell>{member.role}</TableCell>
-                <TableCell>{member.group}</TableCell>
+                <TableCell>
+                  {member.role === "Pastor" ? "Pastor" :
+                    member.role === "Elder" ? "Anciano" :
+                    member.role === "Deacon" ? "Diácono" :
+                    member.role === "Member" ? "Miembro" :
+                    "Visitante"}
+                </TableCell>
+                <TableCell>
+                  {member.group === "Youth" ? "Jóvenes" :
+                    member.group === "Worship" ? "Alabanza" :
+                    member.group === "Children" ? "Niños" :
+                    member.group === "Adults" ? "Adultos" :
+                    "Adultos Mayores"}
+                </TableCell>
                 <TableCell>
                   <div className="flex flex-col">
                     <span className="text-sm">{member.email}</span>

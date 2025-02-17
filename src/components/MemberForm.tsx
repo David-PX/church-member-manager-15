@@ -42,11 +42,11 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{member ? "Edit Member" : "Add New Member"}</DialogTitle>
+          <DialogTitle>{member ? "Editar Miembro" : "Agregar Nuevo Miembro"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="name">Name</Label>
+            <Label htmlFor="name">Nombre</Label>
             <Input
               id="name"
               value={formData.name}
@@ -55,43 +55,51 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
             />
           </div>
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="role">Role</Label>
+            <Label htmlFor="role">Rol</Label>
             <Select
               value={formData.role}
               onValueChange={(value) => setFormData({ ...formData, role: value as MemberRole })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select role" />
+                <SelectValue placeholder="Seleccionar rol" />
               </SelectTrigger>
               <SelectContent>
                 {roles.map((role) => (
                   <SelectItem key={role} value={role}>
-                    {role}
+                    {role === "Pastor" ? "Pastor" :
+                      role === "Elder" ? "Anciano" :
+                      role === "Deacon" ? "Diácono" :
+                      role === "Member" ? "Miembro" :
+                      "Visitante"}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="group">Group</Label>
+            <Label htmlFor="group">Grupo</Label>
             <Select
               value={formData.group}
               onValueChange={(value) => setFormData({ ...formData, group: value as GroupName })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select group" />
+                <SelectValue placeholder="Seleccionar grupo" />
               </SelectTrigger>
               <SelectContent>
                 {groups.map((group) => (
                   <SelectItem key={group} value={group}>
-                    {group}
+                    {group === "Youth" ? "Jóvenes" :
+                      group === "Worship" ? "Alabanza" :
+                      group === "Children" ? "Niños" :
+                      group === "Adults" ? "Adultos" :
+                      "Adultos Mayores"}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="address">Address</Label>
+            <Label htmlFor="address">Dirección</Label>
             <Input
               id="address"
               value={formData.address}
@@ -100,7 +108,7 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
             />
           </div>
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">Correo Electrónico</Label>
             <Input
               id="email"
               type="email"
@@ -110,7 +118,7 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
             />
           </div>
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="phone">Phone</Label>
+            <Label htmlFor="phone">Teléfono</Label>
             <Input
               id="phone"
               type="tel"
@@ -125,13 +133,13 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
               checked={formData.isBaptized}
               onCheckedChange={(checked) => setFormData({ ...formData, isBaptized: checked })}
             />
-            <Label htmlFor="baptized">Baptized</Label>
+            <Label htmlFor="baptized">Bautizado</Label>
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" type="button" onClick={onClose}>
-              Cancel
+              Cancelar
             </Button>
-            <Button type="submit">Save</Button>
+            <Button type="submit">Guardar</Button>
           </div>
         </form>
       </DialogContent>
