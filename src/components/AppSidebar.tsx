@@ -1,3 +1,4 @@
+
 import { Users, UserPlus, Group } from "lucide-react";
 import {
   Sidebar,
@@ -13,12 +14,12 @@ import { useLocation, Link } from "react-router-dom";
 
 const menuItems = [
   {
-    title: "Members",
+    title: "Miembros",
     icon: Users,
     path: "/",
   },
   {
-    title: "Groups",
+    title: "Grupos",
     icon: Group,
     path: "/groups",
   },
@@ -36,7 +37,7 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Management</SidebarGroupLabel>
+          <SidebarGroupLabel>Administración</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {menuItems.map((item) => (
