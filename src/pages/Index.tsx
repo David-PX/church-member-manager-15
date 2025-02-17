@@ -1,9 +1,10 @@
+
 import { useState } from "react";
 import { Member, GroupName, MemberRole } from "@/types/member";
 import { MemberForm } from "@/components/MemberForm";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlus, Users, Pencil } from "lucide-react";
+import { UserPlus, Users, Pencil, Check, X } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import {
   Table,
@@ -26,8 +27,8 @@ const initialMembers: Member[] = [
     email: "john@church.com",
     phone: "(555) 123-4567",
     image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
+    isBaptized: true,
   },
-  // Add more sample members as needed
 ];
 
 const Index = () => {
@@ -36,6 +37,7 @@ const Index = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [filterGroup, setFilterGroup] = useState<GroupName | "all">("all");
   const [filterRole, setFilterRole] = useState<MemberRole | "all">("all");
+  const [filterBaptism, setFilterBaptism] = useState<"all" | "yes" | "no">("all");
   const { toast } = useToast();
 
   const handleAddMember = (newMember: Partial<Member>) => {
@@ -68,7 +70,11 @@ const Index = () => {
   const filteredMembers = members.filter((member) => {
     const matchesGroup = filterGroup === "all" || member.group === filterGroup;
     const matchesRole = filterRole === "all" || member.role === filterRole;
-    return matchesGroup && matchesRole;
+    const matchesBaptism = 
+      filterBaptism === "all" || 
+      (filterBaptism === "yes" && member.isBaptized) || 
+      (filterBaptism === "no" && !member.isBaptized);
+    return matchesGroup && matchesRole && matchesBaptism;
   });
 
   return (
@@ -115,6 +121,18 @@ const Index = () => {
             </SelectContent>
           </Select>
         </div>
+        <div className="w-48">
+          <Select value={filterBaptism} onValueChange={(value: "all" | "yes" | "no") => setFilterBaptism(value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Filter by Baptism" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Members</SelectItem>
+              <SelectItem value="yes">Baptized</SelectItem>
+              <SelectItem value="no">Not Baptized</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       <div className="rounded-md border">
@@ -126,6 +144,7 @@ const Index = () => {
               <TableHead>Group</TableHead>
               <TableHead>Contact</TableHead>
               <TableHead>Address</TableHead>
+              <TableHead>Baptized</TableHead>
               <TableHead className="w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -150,6 +169,13 @@ const Index = () => {
                   </div>
                 </TableCell>
                 <TableCell>{member.address}</TableCell>
+                <TableCell>
+                  {member.isBaptized ? (
+                    <Check className="h-4 w-4 text-green-500" />
+                  ) : (
+                    <X className="h-4 w-4 text-red-500" />
+                  )}
+                </TableCell>
                 <TableCell>
                   <Button
                     variant="ghost"

@@ -1,9 +1,11 @@
+
 import { Member, MemberRole, GroupName } from "@/types/member";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Button } from "./ui/button";
+import { Switch } from "./ui/switch";
 import { useState } from "react";
 
 interface MemberFormProps {
@@ -26,6 +28,7 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
       email: "",
       phone: "",
       image: "",
+      isBaptized: false,
     }
   );
 
@@ -115,6 +118,14 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               required
             />
+          </div>
+          <div className="flex items-center gap-2">
+            <Switch
+              id="baptized"
+              checked={formData.isBaptized}
+              onCheckedChange={(checked) => setFormData({ ...formData, isBaptized: checked })}
+            />
+            <Label htmlFor="baptized">Baptized</Label>
           </div>
           <div className="flex justify-end gap-2">
             <Button variant="outline" type="button" onClick={onClose}>
