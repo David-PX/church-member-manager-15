@@ -1,15 +1,16 @@
 
-export type MemberRole = "Pastor" | "Elder" | "Deacon" | "Member" | "Visitor";
-export type GroupName = "Youth" | "Worship" | "Children" | "Adults" | "Seniors";
+export type MemberRole = "Pastor" | "Lider" | "Miembro" | "Visitante";
+export type GroupName = "Jovenes" | "Adoración" | "Niños" | "Caballeros" | "Damas" | "Adolescentes";
 
 export interface Member {
   id: string;
-  name: string;
+  names: string;
+  lastNames: string;
   image: string;
   role: MemberRole;
-  group: GroupName;
+  minister: GroupName;
   address: string;
   email: string;
   phone: string;
-  isBaptized: boolean;
+  baptized: boolean;
 }
