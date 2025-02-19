@@ -1,6 +1,6 @@
 
 export type MemberRole = "Pastor" | "Lider" | "Miembro" | "Visitante";
-export type GroupName = "Jovenes" | "Adoración" | "Niños" | "Caballeros" | "Damas" | "Adolescentes";
+export type Minister = "Jovenes" | "Adoración" | "Niños" | "Caballeros" | "Damas" | "Adolescentes";
 
 export interface Member {
   id: string;
@@ -8,7 +8,7 @@ export interface Member {
   lastNames: string;
   image: string;
   role: MemberRole;
-  minister: GroupName;
+  minister: Minister;
   address: string;
   email: string;
   phone: string;

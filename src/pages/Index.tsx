@@ -1,10 +1,10 @@
 
 import { useState } from "react";
-import { Member, GroupName, MemberRole } from "@/types/member";
+import { Member, Minister, MemberRole } from "@/types/member";
 import { MemberForm } from "@/components/MemberForm";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlus, Users, Pencil, Check, X, Search } from "lucide-react";
+import { UserPlus, Users, Pencil, Check, X, Search, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import {
@@ -22,7 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 const Index = () => {
   const [selectedMember, setSelectedMember] = useState<Member | undefined>();
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [filterGroup, setFilterGroup] = useState<GroupName | "all">("all");
+  const [filterGroup, setFilterGroup] = useState<Minister | "all">("all");
   const [filterRole, setFilterRole] = useState<MemberRole | "all">("all");
   const [filterBaptism, setFilterBaptism] = useState<"all" | "yes" | "no">("all");
   const [searchTerm, setSearchTerm] = useState("");
@@ -39,6 +39,8 @@ const Index = () => {
       toast({
         title: "Éxito",
         description: "Miembro agregado exitosamente",
+        variant: "destructive", // Si tu configuración de ShadCN lo soporta
+        className: "bg-green-500 text-white border-green-700 shadow-lg",
       });
       setIsFormOpen(false);
     } catch (error) {
@@ -123,14 +125,14 @@ const Index = () => {
         </div>
         <div className="flex gap-4">
           <div className="w-48">
-            <Select value={filterGroup} onValueChange={(value: GroupName | "all") => setFilterGroup(value)}>
+            <Select value={filterGroup} onValueChange={(value: Minister | "all") => setFilterGroup(value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Filtrar por Grupo" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos los Grupos</SelectItem>
                 {["Jovenes", "Adoración", "Niños", "Caballeros", "Damas", "Adolescentes"].map((group) => (
-                  <SelectItem key={group} value={group as GroupName}>{group}</SelectItem>
+                  <SelectItem key={group} value={group as Minister}>{group}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

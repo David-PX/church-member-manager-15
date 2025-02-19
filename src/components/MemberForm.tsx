@@ -1,5 +1,5 @@
 
-import { Member, MemberRole, GroupName } from "@/types/member";
+import { Member, MemberRole, Minister } from "@/types/member";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -16,7 +16,7 @@ interface MemberFormProps {
 }
 
 const roles: MemberRole[] = ["Pastor" ,"Lider" , "Miembro" , "Visitante"];
-const groups: GroupName[] = ["Jovenes" , "Adoración" , "Niños" , "Caballeros" , "Damas" , "Adolescentes"];
+const ministers: Minister[] = ["Jovenes" , "Adoración" , "Niños" , "Caballeros" , "Damas" , "Adolescentes"];
 
 export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) => {
   const [formData, setFormData] = useState<Partial<Member>>(
@@ -47,11 +47,20 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="name">Nombre</Label>
+            <Label htmlFor="name">Nombres</Label>
             <Input
-              id="name"
+              id="names"
               value={formData.names}
               onChange={(e) => setFormData({ ...formData, names: e.target.value })}
+              required
+            />
+          </div>
+          <div className="grid w-full gap-1.5">
+            <Label htmlFor="name">Apellidos</Label>
+            <Input
+              id="lastNames"
+              value={formData.lastNames}
+              onChange={(e) => setFormData({ ...formData, lastNames: e.target.value })}
               required
             />
           </div>
@@ -74,18 +83,18 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
             </Select>
           </div>
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="group">Grupo</Label>
+            <Label htmlFor="minister">Ministerio</Label>
             <Select
               value={formData.minister}
-              onValueChange={(value) => setFormData({ ...formData, minister: value as GroupName })}
+              onValueChange={(value) => setFormData({ ...formData, minister: value as Minister })}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Seleccionar grupo" />
+                <SelectValue placeholder="Seleccionar ministerio" />
               </SelectTrigger>
               <SelectContent>
-                {groups.map((group) => (
-                  <SelectItem key={group} value={group}>
-                    {group}
+                {ministers.map((minister) => (
+                  <SelectItem key={minister} value={minister}>
+                    {minister}
                   </SelectItem>
                 ))}
               </SelectContent>
