@@ -1,44 +1,65 @@
+
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Member } from "@/types/member";
 
-const API_URL = "https://localhost:7160/api/members"; 
+const API_URL = "https://c3ed-190-166-138-34.ngrok-free.app/api/members";
 
-export const fetchMembers = async () => {
-  const response = await fetch(API_URL);
-  if (!response.ok) throw new Error("Error al obtener los miembros");
-  return response.json();
-};
-
-export const fetchMemberById = async (id: string) => {
-  const response = await fetch(`${API_URL}/${id}`);
-  if (!response.ok) throw new Error("Error al obtener el miembro");
-  return response.json();
-};
-
-export const createMember = async (member: Partial<Member>) => {
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(member),
+export const useMembers = () => {
+  return useQuery({
+    queryKey: ["members"],
+    queryFn: async () => {
+      const response = await fetch(API_URL);
+      if (!response.ok) throw new Error("Error al obtener los miembros");
+      return response.json() as Promise<Member[]>;
+    },
   });
-  if (!response.ok) throw new Error("Error al crear el miembro");
-  return response.json();
 };
 
-export const updateMember = async (id: string, updatedMember: Partial<Member>) => {
-  const response = await fetch(`${API_URL}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(updatedMember),
+export const useCreateMember = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: async (member: Partial<Member>) => {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(member),
+      });
+      if (!response.ok) throw new Error("Error al crear el miembro");
+      return response.json() as Promise<Member>;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["members"] });
+    },
   });
-  if (!response.ok) throw new Error("Error al actualizar el miembro");
-  return response.json();
 };
 
-export const deleteMember = async (id: string) => {
-  const response = await fetch(`${API_URL}/${id}`, {
-    method: "DELETE",
+export const useUpdateMember = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: Partial<Member> }) => {
+      const response = await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!response.ok) throw new Error("Error al actualizar el miembro");
+      return response.json() as Promise<Member>;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["members"] });
+    },
   });
-  if (!response.ok) throw new Error("Error al eliminar el miembro");
-  return response.json();
+};
+
+export const useMembersCount = () => {
+  return useQuery({
+    queryKey: ["members-count"],
+    queryFn: async () => {
+      const response = await fetch(`${API_URL}/count`);
+      if (!response.ok) throw new Error("Error al obtener el conteo de miembros");
+      return response.json() as Promise<number>;
+    },
+  });
 };
