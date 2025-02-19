@@ -19,9 +19,9 @@ const menuItems = [
     path: "/",
   },
   {
-    title: "Grupos",
+    title: "Ministerios",
     icon: Group,
-    path: "/groups",
+    path: "/ministries",
   },
   {
     title: "Roles",

@@ -2,7 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Member } from "@/types/member";
 
-const API_URL = "https://c3ed-190-166-138-34.ngrok-free.app/api/members";
+const API_URL = "https://localhost:7160/api/members";
 
 export const useMembers = () => {
   return useQuery({

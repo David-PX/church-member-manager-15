@@ -14,14 +14,14 @@ export const MemberCard = ({ member, onEdit }: MemberCardProps) => {
       <CardHeader className="flex flex-row items-center gap-4 pb-2">
         <img
           src={member.image || "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"}
-          alt={member.name}
+          alt={member.names}
           className="w-16 h-16 rounded-full object-cover"
         />
         <div>
-          <h3 className="font-semibold text-lg">{member.name}</h3>
+          <h3 className="font-semibold text-lg">{member.names}</h3>
           <div className="flex gap-2">
             <Badge variant="secondary">{member.role}</Badge>
-            <Badge variant="outline">{member.group}</Badge>
+            <Badge variant="outline">{member.minister}</Badge>
           </div>
         </div>
       </CardHeader>

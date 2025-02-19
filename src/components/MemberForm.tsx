@@ -15,20 +15,21 @@ interface MemberFormProps {
   onSave: (member: Partial<Member>) => void;
 }
 
-const roles: MemberRole[] = ["Pastor", "Elder", "Deacon", "Member", "Visitor"];
-const groups: GroupName[] = ["Youth", "Worship", "Children", "Adults", "Seniors"];
+const roles: MemberRole[] = ["Pastor" ,"Lider" , "Miembro" , "Visitante"];
+const groups: GroupName[] = ["Jovenes" , "Adoración" , "Niños" , "Caballeros" , "Damas" , "Adolescentes"];
 
 export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) => {
   const [formData, setFormData] = useState<Partial<Member>>(
     member || {
-      name: "",
-      role: "Member",
-      group: "Adults",
+      names: "",
+      lastNames: "",
+      role: "Miembro",
+      minister: "Jovenes",
       address: "",
       email: "",
       phone: "",
       image: "",
-      isBaptized: false,
+      baptized: false,
     }
   );
 
@@ -49,8 +50,8 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
             <Label htmlFor="name">Nombre</Label>
             <Input
               id="name"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              value={formData.names}
+              onChange={(e) => setFormData({ ...formData, names: e.target.value })}
               required
             />
           </div>
@@ -66,11 +67,7 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
               <SelectContent>
                 {roles.map((role) => (
                   <SelectItem key={role} value={role}>
-                    {role === "Pastor" ? "Pastor" :
-                      role === "Elder" ? "Anciano" :
-                      role === "Deacon" ? "Diácono" :
-                      role === "Member" ? "Miembro" :
-                      "Visitante"}
+                    {role}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -79,8 +76,8 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
           <div className="grid w-full gap-1.5">
             <Label htmlFor="group">Grupo</Label>
             <Select
-              value={formData.group}
-              onValueChange={(value) => setFormData({ ...formData, group: value as GroupName })}
+              value={formData.minister}
+              onValueChange={(value) => setFormData({ ...formData, minister: value as GroupName })}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Seleccionar grupo" />
@@ -88,11 +85,7 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
               <SelectContent>
                 {groups.map((group) => (
                   <SelectItem key={group} value={group}>
-                    {group === "Youth" ? "Jóvenes" :
-                      group === "Worship" ? "Alabanza" :
-                      group === "Children" ? "Niños" :
-                      group === "Adults" ? "Adultos" :
-                      "Adultos Mayores"}
+                    {group}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -130,8 +123,8 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
           <div className="flex items-center gap-2">
             <Switch
               id="baptized"
-              checked={formData.isBaptized}
-              onCheckedChange={(checked) => setFormData({ ...formData, isBaptized: checked })}
+              checked={formData.baptized}
+              onCheckedChange={(checked) => setFormData({ ...formData, baptized: checked })}
             />
             <Label htmlFor="baptized">Bautizado</Label>
           </div>
