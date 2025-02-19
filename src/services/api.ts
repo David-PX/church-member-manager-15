@@ -2,7 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Member } from "@/types/member";
 
-const API_URL = "https://localhost:7160/api/members";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const useMembers = () => {
   return useQuery({
