@@ -66,7 +66,9 @@ const Index = () => {
       });
       toast({
         title: "Éxito",
-        description: "Miembro actualizado exitosamente",
+        description: "Miembro editado exitosamente",
+        variant: "destructive", // Si tu configuración de ShadCN lo soporta
+        className: "bg-blue-500 text-white border-green-700 shadow-lg",
       });
       setIsFormOpen(false);
       setSelectedMember(undefined);
@@ -127,10 +129,10 @@ const Index = () => {
           <div className="w-48">
             <Select value={filterGroup} onValueChange={(value: Minister | "all") => setFilterGroup(value)}>
               <SelectTrigger>
-                <SelectValue placeholder="Filtrar por Grupo" />
+                <SelectValue placeholder="Filtrar por Ministerio" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Todos los Grupos</SelectItem>
+                <SelectItem value="all">Todos los Ministerios</SelectItem>
                 {["Jovenes", "Adoración", "Niños", "Caballeros", "Damas", "Adolescentes"].map((group) => (
                   <SelectItem key={group} value={group as Minister}>{group}</SelectItem>
                 ))}

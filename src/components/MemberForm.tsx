@@ -6,7 +6,7 @@ import { Label } from "./ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Button } from "./ui/button";
 import { Switch } from "./ui/switch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface MemberFormProps {
   member?: Member;
@@ -33,6 +33,24 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
     }
   );
 
+  useEffect(() => {
+    if (member) {
+      setFormData(member);
+    } else {
+      setFormData({
+        names: "",
+        lastNames: "",
+        role: "Miembro",
+        minister: "Jovenes",
+        address: "",
+        email: "",
+        phone: "",
+        image: "",
+        baptized: false,
+      });
+    }
+  }, [member]);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave(formData);
@@ -56,7 +74,7 @@ export const MemberForm = ({ member, open, onClose, onSave }: MemberFormProps) =
             />
           </div>
           <div className="grid w-full gap-1.5">
-            <Label htmlFor="name">Apellidos</Label>
+            <Label htmlFor="lastNames">Apellidos</Label>
             <Input
               id="lastNames"
               value={formData.lastNames}
