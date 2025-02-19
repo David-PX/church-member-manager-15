@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Member, Minister, MemberRole } from "@/types/member";
 import { MemberForm } from "@/components/MemberForm";
@@ -6,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { UserPlus, Users, Pencil, Check, X, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
