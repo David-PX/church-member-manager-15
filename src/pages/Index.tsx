@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Member, Minister, MemberRole } from "@/types/member";
 import { MemberForm } from "@/components/MemberForm";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserPlus, Users, Pencil, Check, X, Search, CheckCircle } from "lucide-react";
+import { UserPlus, Users, Pencil, Check, X, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import {
@@ -18,6 +17,17 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useMembers, useCreateMember, useUpdateMember, useMembersCount } from "@/services/api";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+
+const ITEMS_PER_PAGE = 10;
 
 const Index = () => {
   const [selectedMember, setSelectedMember] = useState<Member | undefined>();
@@ -26,6 +36,7 @@ const Index = () => {
   const [filterRole, setFilterRole] = useState<MemberRole | "all">("all");
   const [filterBaptism, setFilterBaptism] = useState<"all" | "yes" | "no">("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
   const { toast } = useToast();
 
   const { data: members = [], isLoading } = useMembers();
@@ -39,7 +50,7 @@ const Index = () => {
       toast({
         title: "Éxito",
         description: "Miembro agregado exitosamente",
-        variant: "destructive", // Si tu configuración de ShadCN lo soporta
+        variant: "destructive",
         className: "bg-green-500 text-white border-green-700 shadow-lg",
       });
       setIsFormOpen(false);
@@ -67,7 +78,7 @@ const Index = () => {
       toast({
         title: "Éxito",
         description: "Miembro editado exitosamente",
-        variant: "destructive", // Si tu configuración de ShadCN lo soporta
+        variant: "destructive",
         className: "bg-blue-500 text-white border-green-700 shadow-lg",
       });
       setIsFormOpen(false);
@@ -91,6 +102,16 @@ const Index = () => {
       (filterBaptism === "no" && !member.baptized);
     return matchesSearch && matchesGroup && matchesRole && matchesBaptism;
   });
+
+  const totalPages = Math.ceil(filteredMembers.length / ITEMS_PER_PAGE);
+  const paginatedMembers = filteredMembers.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div>
@@ -187,14 +208,14 @@ const Index = () => {
                   Cargando miembros...
                 </TableCell>
               </TableRow>
-            ) : filteredMembers.length === 0 ? (
+            ) : paginatedMembers.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={7} className="text-center py-4">
                   No se encontraron miembros
                 </TableCell>
               </TableRow>
             ) : (
-              filteredMembers.map((member) => (
+              paginatedMembers.map((member) => (
                 <TableRow key={member.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -236,6 +257,57 @@ const Index = () => {
           </TableBody>
         </Table>
       </div>
+
+      {totalPages > 1 && (
+        <div className="mt-4">
+          <Pagination>
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
+                  className={cn(currentPage === 1 && "pointer-events-none opacity-50")}
+                />
+              </PaginationItem>
+              {[...Array(totalPages)].map((_, i) => {
+                const page = i + 1;
+                if (
+                  page === 1 ||
+                  page === totalPages ||
+                  (page >= currentPage - 1 && page <= currentPage + 1)
+                ) {
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={() => handlePageChange(page)}
+                        isActive={currentPage === page}
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                }
+                if (
+                  page === currentPage - 2 ||
+                  page === currentPage + 2
+                ) {
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                  );
+                }
+                return null;
+              })}
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
+                  className={cn(currentPage === totalPages && "pointer-events-none opacity-50")}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </div>
+      )}
 
       <MemberForm
         member={selectedMember}
